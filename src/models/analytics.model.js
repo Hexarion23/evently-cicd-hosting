@@ -1,5 +1,5 @@
 // src/models/analytics.model.js
-const { supabase } = require('./supabaseClient');
+import { supabase } from './supabaseClient.js';
 
 // Count with simple equality filters
 async function countRowsWhere(table, matchObj) {
@@ -196,7 +196,7 @@ async function getTopEvents(ccaId, limit = 5) {
   return combined.slice(0, limit);
 }
 
-module.exports = {
+export {
   getExcoCcaIdForUser,
   getCcaById,
   countMembers,

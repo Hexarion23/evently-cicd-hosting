@@ -1,8 +1,8 @@
 // src/cron/waitlist.cron.js
 
-const cron = require("node-cron");
-const waitlistModel = require("../models/waitlist.model");
-const waitlistController = require("../controllers/waitlist.controller");
+import cron from "node-cron";
+import * as waitlistModel from "../models/waitlist.model.js";
+import * as waitlistController from "../controllers/waitlist.controller.js";
 
 // Run every 5 minutes
 cron.schedule("*/5 * * * *", async () => {

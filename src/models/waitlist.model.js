@@ -2,7 +2,7 @@
    WAITLIST MODEL — FINAL CLEAN VERSION (Option A logic)
 ============================================================ */
 
-const { supabase } = require("./supabaseClient");
+import { supabase } from "./supabaseClient.js";
 
 /* ------------------------------------------------------------
    ADD USER TO WAITLIST
@@ -310,7 +310,7 @@ async function autoPromoteNext(eventId) {
 /* ------------------------------------------------------------
    EXPORTS
 ------------------------------------------------------------ */
-module.exports = {
+export {
   addUserToWaitlist,
   getWaitlistEntry,
   getWaitlistForEvent,

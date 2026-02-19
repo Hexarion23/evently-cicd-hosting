@@ -1,4 +1,4 @@
-const { supabase } = require("./supabaseClient");
+import { supabase } from "./supabaseClient.js";
 
 // ---------- helpers ----------
 function dmKey(a, b) {
@@ -680,8 +680,6 @@ async function issueWarning({ user_id, case_id, issued_by, reason, expires_at = 
 
 
 async function suspendUser({ user_id, created_by, reason, hours = 72 }) {
-  const { supabase } = require("./supabaseClient");
-
   const start = new Date();
   const end = new Date(Date.now() + Number(hours) * 60 * 60 * 1000);
 
@@ -735,8 +733,6 @@ async function isUserSuspended(userId) {
 }
 
 async function liftSuspension({ user_id, lifted_by, reason }) {
-  const { supabase } = require("./supabaseClient");
-
   const uid = Number(user_id);
   const staffId = Number(lifted_by);
   const note =
@@ -807,7 +803,7 @@ async function isGlobalModerator(userId) {
 
 
 
-module.exports = {
+export {
   dmKey,
 
   getUserProfileBasic,

@@ -1,7 +1,8 @@
-const express = require("express");
+import express from "express";
+import * as attendanceController from "../controllers/attendance.controller.js";
+
 const router = express.Router();
 
-const attendanceController = require("../controllers/attendance.controller");
 router.post("/scan", attendanceController.scanAttendance);
 
-module.exports = router;
+export default router;

@@ -1,8 +1,8 @@
-const jwt = require("jsonwebtoken");
-const createError = require("http-errors");
+import jwt from "jsonwebtoken";
+import createError from "http-errors";
 
-const messengerModel = require("../models/messenger.model");
-const { createNotification } = require("../models/notification.model");
+import messengerModel from "../models/messenger.model.js";
+import { createNotification } from "../models/notification.model.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -1205,7 +1205,7 @@ async function moderationAction(req, res, next) {
   }
 }
 
-module.exports = {
+export {
   listConversations,
   openCcaGroup,
   openDm,

@@ -1,4 +1,4 @@
-const { supabase } = require('./supabaseClient');
+import { supabase } from './supabaseClient.js';
 
 async function createUser({ admin_number, name, email, password_hash, user_type, avatar }) {
   const payload = { admin_number, name, email, password_hash, user_type };
@@ -47,7 +47,7 @@ async function getUserById(id) {
   return data || null;
 }
 
-module.exports = {
+export {
   createUser,
   getUserByEmail,
   getUserByAdminNumber,

@@ -1,6 +1,6 @@
 // src/controllers/engagement.controller.js
-const jwt = require("jsonwebtoken");
-const engagementModel = require("../models/engagement.model");
+import jwt from "jsonwebtoken";
+import engagementModel from "../models/engagement.model.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev_jwt_secret_change_me";
 
@@ -15,7 +15,7 @@ function getUserFromCookie(req) {
 }
 
 // GET /api/engagement/me
-exports.getMyEngagement = async (req, res) => {
+async function getMyEngagement(req, res) {
   try {
     const user = getUserFromCookie(req);
     if (!user) {
@@ -39,10 +39,10 @@ exports.getMyEngagement = async (req, res) => {
       .status(500)
       .json({ error: "Server error calculating engagement" });
   }
-};
+}
 
 // GET /api/engagement/recommendations?limit=5
-exports.getMyRecommendations = async (req, res) => {
+async function getMyRecommendations(req, res) {
   try {
     const user = getUserFromCookie(req);
     if (!user) {
@@ -66,4 +66,6 @@ exports.getMyRecommendations = async (req, res) => {
       .status(500)
       .json({ error: "Server error computing recommendations" });
   }
-};
+}
+
+export { getMyEngagement, getMyRecommendations };

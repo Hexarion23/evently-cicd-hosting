@@ -1,9 +1,7 @@
-const { supabase } = require("./supabaseClient");
+import { supabase } from "./supabaseClient.js";
 
-// =====================================================
 // GET ALL PROPOSALS FOR A USER
-// =====================================================
-module.exports.getUserProposals = async function getUserProposals(userId) {
+async function getUserProposals(userId) {
   const { data, error } = await supabase
     .from("event_proposals")
     .select("*")
@@ -15,12 +13,12 @@ module.exports.getUserProposals = async function getUserProposals(userId) {
     throw error;
   }
   return data || [];
-};
+}
 
 // =====================================================
 // GET SINGLE PROPOSAL
 // =====================================================
-module.exports.getProposalById = async function getProposalById(proposalId) {
+async function getProposalById(proposalId) {
   const { data, error } = await supabase
     .from("event_proposals")
     .select("*")
@@ -32,12 +30,12 @@ module.exports.getProposalById = async function getProposalById(proposalId) {
     throw error;
   }
   return data;
-};
+}
 
 // =====================================================
 // CREATE NEW PROPOSAL
 // =====================================================
-module.exports.createProposal = async function createProposal(proposalData) {
+async function createProposal(proposalData) {
   const { data, error } = await supabase
     .from("event_proposals")
     .insert([
@@ -57,12 +55,12 @@ module.exports.createProposal = async function createProposal(proposalData) {
     throw error;
   }
   return data;
-};
+}
 
 // =====================================================
 // UPDATE PROPOSAL
 // =====================================================
-module.exports.updateProposal = async function updateProposal(proposalId, updates) {
+async function updateProposal(proposalId, updates) {
   const { data, error } = await supabase
     .from("event_proposals")
     .update({
@@ -78,12 +76,12 @@ module.exports.updateProposal = async function updateProposal(proposalId, update
     throw error;
   }
   return data;
-};
+}
 
 // =====================================================
 // DELETE PROPOSAL
 // =====================================================
-module.exports.deleteProposal = async function deleteProposal(proposalId) {
+async function deleteProposal(proposalId) {
   const { error } = await supabase
     .from("event_proposals")
     .delete()
@@ -94,12 +92,12 @@ module.exports.deleteProposal = async function deleteProposal(proposalId) {
     throw error;
   }
   return true;
-};
+}
 
 // =====================================================
 // SAVE PROPOSAL DRAFT
 // =====================================================
-module.exports.saveProposalDraft = async function saveProposalDraft(proposalId, formData) {
+async function saveProposalDraft(proposalId, formData) {
   const { data, error } = await supabase
     .from("event_proposals")
     .update({
@@ -116,4 +114,13 @@ module.exports.saveProposalDraft = async function saveProposalDraft(proposalId, 
     throw error;
   }
   return data;
+}
+
+export {
+  getUserProposals,
+  getProposalById,
+  createProposal,
+  updateProposal,
+  deleteProposal,
+  saveProposalDraft,
 };

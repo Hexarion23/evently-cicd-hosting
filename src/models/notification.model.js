@@ -1,4 +1,4 @@
-const { supabase } = require("./supabaseClient");
+import { supabase } from "./supabaseClient.js";
 
 
 // =====================================================
@@ -7,7 +7,7 @@ const { supabase } = require("./supabaseClient");
 // createNotification(userId, message)
 // createNotification(userId, message, { notification_type, conversation_id, event_id })
 // =====================================================
-module.exports.createNotification = async function createNotification(userId, message, meta = {}) {
+async function createNotification(userId, message, meta = {}) {
   const payload = {
     user_id: userId,
     message,
@@ -30,38 +30,38 @@ module.exports.createNotification = async function createNotification(userId, me
   }
 
   return data || null;
-};
+}
 
 // =====================================================
 // CREATE NOTIFICATION FOR EXCO WHEN EVENT CREATED
 // =====================================================
-module.exports.notifyExcoEventCreated = async function notifyExcoEventCreated(userId, event) {
+async function notifyExcoEventCreated(userId, event) {
   try {
     const message = `Your event "${event.title}" has been created successfully`;
-    return await module.exports.createNotification(userId, message);
+    return await createNotification(userId, message);
   } catch (err) {
     console.error("notifyExcoEventCreated error:", err);
     return null;
   }
-};
+}
 
 // =====================================================
 // CREATE NOTIFICATION FOR EXCO WHEN EVENT EDITED
 // =====================================================
-module.exports.notifyExcoEventEdited = async function notifyExcoEventEdited(userId, event) {
+async function notifyExcoEventEdited(userId, event) {
   try {
     const message = `You have updated "${event.title}"`;
-    return await module.exports.createNotification(userId, message);
+    return await createNotification(userId, message);
   } catch (err) {
     console.error("notifyExcoEventEdited error:", err);
     return null;
   }
-};
+}
 
 // =====================================================
 // CREATE NOTIFICATIONS FOR ALL SIGNUPS - EVENT COMING UP
 // =====================================================
-module.exports.notifyUsersEventComingUp = async function notifyUsersEventComingUp(eventId, event) {
+async function notifyUsersEventComingUp(eventId, event) {
   try {
     // Get all users who signed up for this event
     const { data: signups, error: signupError } = await supabase
@@ -82,7 +82,7 @@ module.exports.notifyUsersEventComingUp = async function notifyUsersEventComingU
 
     // Create notification for each user
     const promises = signups.map((signup) =>
-      module.exports.createNotification(signup.user_id, message).catch(() => null)
+      createNotification(signup.user_id, message).catch(() => null)
     );
 
     await Promise.all(promises);
@@ -92,12 +92,12 @@ module.exports.notifyUsersEventComingUp = async function notifyUsersEventComingU
     console.error("notifyUsersEventComingUp error:", err);
     return 0;
   }
-};
+}
 
 // =====================================================
 // CREATE NOTIFICATIONS FOR ALL SIGNUPS - EVENT CONCLUDED
 // =====================================================
-module.exports.notifyUsersEventConcluded = async function notifyUsersEventConcluded(eventId, event) {
+async function notifyUsersEventConcluded(eventId, event) {
   try {
     // Get all users who signed up for this event
     const { data: signups, error: signupError } = await supabase
@@ -118,7 +118,7 @@ module.exports.notifyUsersEventConcluded = async function notifyUsersEventConclu
 
     // Create notification for each user
     const promises = signups.map((signup) =>
-      module.exports.createNotification(signup.user_id, message).catch(() => null)
+      createNotification(signup.user_id, message).catch(() => null)
     );
 
     await Promise.all(promises);
@@ -128,17 +128,26 @@ module.exports.notifyUsersEventConcluded = async function notifyUsersEventConclu
     console.error("notifyUsersEventConcluded error:", err);
     return 0;
   }
-};
+}
 
 // =====================================================
 // CREATE NOTIFICATION FOR EXCO - SIGNUP COUNT UPDATE
 // =====================================================
-module.exports.notifyExcoSignupCount = async function notifyExcoSignupCount(userId, event, signupCount) {
+async function notifyExcoSignupCount(userId, event, signupCount) {
   try {
     const message = `${signupCount} member(s) have signed up for "${event.title}"`;
-    return await module.exports.createNotification(userId, message);
+    return await createNotification(userId, message);
   } catch (err) {
     console.error("notifyExcoSignupCount error:", err);
     return null;
   }
+}
+
+export {
+  createNotification,
+  notifyExcoEventCreated,
+  notifyExcoEventEdited,
+  notifyUsersEventComingUp,
+  notifyUsersEventConcluded,
+  notifyExcoSignupCount,
 };

@@ -1,24 +1,30 @@
-const express = require("express");
-const createError = require("http-errors");
-const path = require("path");
-require("dotenv").config();
-const cookieParser = require("cookie-parser");
+import express from "express";
+import createError from "http-errors";
+import path from "path";
+import cookieParser from "cookie-parser";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import authRouter from "./routers/auth.router.js";
+import eventRouter from "./routers/Event.router.js";
+import attendanceRouter from "./routers/attendance.router.js";
+import notificationRouter from "./routers/notification.router.js";
+import analyticsRouter from "./routers/analytics.router.js";
+import waitlistRouter from "./routers/waitlist.router.js";
+import engagementRouter from "./routers/engagement.router.js";
+import chatRouter from "./routers/chatbot.router.js";
+import messengerRouter from "./routers/messenger.router.js";
+import eventCommandRouter from "./routers/event-command.router.js";
+import proposalRouter from "./routers/proposal.router.js";
 
-const authRouter = require("./routers/auth.router");
-const eventRouter = require("./routers/Event.router");
-const attendanceRouter = require("./routers/attendance.router");
-const notificationRouter = require("./routers/notification.router");
-const analyticsRouter = require("./routers/analytics.router");
-const waitlistRouter = require("./routers/waitlist.router");
-const engagementRouter = require("./routers/engagement.router");
-const chatRouter = require("./routers/chatbot.router");
-const messengerRouter = require("./routers/messenger.router");
-const eventCommandRouter = require("./routers/event-command.router");
-const proposalRouter = require("./routers/proposal.router");
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 //prevent cron from running during Jest
 if (process.env.NODE_ENV !== "test") {
-  require("./cron/waitlist.cron");
+  import("./cron/waitlist.cron.js");
 }
 
 const app = express();
@@ -48,7 +54,6 @@ app.get("/", (req, res) => {
 // =================================================
 // ACCESS CONTROL MIDDLEWARE (The Gatekeeper)
 // =================================================
-const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_change_me";
 
 const accessControl = (req, res, next) => {
@@ -133,4 +138,4 @@ app.use((error, req, res, next) => {
   });
 });
 
-module.exports = app;
+export default app;

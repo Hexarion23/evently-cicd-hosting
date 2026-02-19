@@ -1,6 +1,7 @@
-const express = require("express");
+import express from 'express';
+import * as proposalController from '../controllers/proposal.controller.js';
+
 const router = express.Router();
-const proposalController = require("../controllers/proposal.controller");
 
 // ===============================
 // PROPOSAL CRUD
@@ -30,4 +31,4 @@ router.post("/:id/save-draft", proposalController.saveProposalDraft);
 // DOWNLOAD proposal as PDF (both saved and direct)
 router.get("/:id/download-pdf", proposalController.downloadProposal);
 
-module.exports = router;
+export default router;

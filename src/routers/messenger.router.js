@@ -1,10 +1,8 @@
-const express = require("express");
+import express from "express";
+import * as messenger from "../controllers/messenger.controller.js";
+import requireNotSuspended from "../middleware/requireNotSuspended.js";
+
 const router = express.Router();
-
-const messenger = require("../controllers/messenger.controller");
-
-// 🔒 Suspension guard (NEW)
-const requireNotSuspended = require("../middleware/requireNotSuspended");
 
 // ==============================
 // Conversations / Sidebar
@@ -122,4 +120,4 @@ router.get(
   messenger.searchUsersForDm
 );
 
-module.exports = router;
+export default router;

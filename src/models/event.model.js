@@ -1,9 +1,9 @@
-const { supabase } = require("./supabaseClient");
+import { supabase } from "./supabaseClient.js";
 
 // =====================================================
 // GET ALL EVENTS (Dashboard uses this)
 // =====================================================
-module.exports.getAllEvents = async function getAllEvents() {
+async function getAllEvents() {
   const { data, error } = await supabase
     .from("event")
     .select("*")
@@ -14,12 +14,12 @@ module.exports.getAllEvents = async function getAllEvents() {
     throw error;
   }
   return data || [];
-};
+}
 
 // =====================================================
 // GET UPCOMING EVENTS (Optional, KEEPING YOUR ORIGINAL)
 // =====================================================
-module.exports.getUpcomingEvents = async function getUpcomingEvents() {
+async function getUpcomingEvents() {
   const now = new Date()
     .toLocaleString("sv-SE", { timeZone: "Asia/Singapore" })
     .replace(" ", "T");
@@ -35,12 +35,12 @@ module.exports.getUpcomingEvents = async function getUpcomingEvents() {
     throw error;
   }
   return data || [];
-};
+}
 
 // =====================================================
 // GET SINGLE EVENT BY ID (NEW)
 // =====================================================
-module.exports.getEventById = async function getEventById(eventId) {
+async function getEventById(eventId) {
   const { data, error } = await supabase
     .from("event")
     .select("*")
@@ -53,12 +53,12 @@ module.exports.getEventById = async function getEventById(eventId) {
   }
 
   return data;
-};
+}
 
 // =====================================================
 // CREATE NEW EVENT (KEEPING YOUR ORIGINAL LOGIC)
 // =====================================================
-module.exports.createEvent = async function createEvent(eventData) {
+async function createEvent(eventData) {
   const { data, error } = await supabase
     .from("event")
     .insert([
@@ -89,12 +89,12 @@ module.exports.createEvent = async function createEvent(eventData) {
   }
 
   return data;
-};
+}
 
 // =====================================================
 // UPDATE EVENT (NEW)
 // =====================================================
-module.exports.updateEvent = async function updateEvent(eventId, updates) {
+async function updateEvent(eventId, updates) {
   const { data, error } = await supabase
     .from("event")
     .update(updates)
@@ -108,12 +108,12 @@ module.exports.updateEvent = async function updateEvent(eventId, updates) {
   }
 
   return data;
-};
+}
 
 // =====================================================
 // DELETE EVENT (NEW)
 // =====================================================
-module.exports.deleteEvent = async function deleteEvent(eventId) {
+async function deleteEvent(eventId) {
   const { error } = await supabase
     .from("event")
     .delete()
@@ -125,9 +125,9 @@ module.exports.deleteEvent = async function deleteEvent(eventId) {
   }
 
   return true;
-};
+}
 
-module.exports.upsertEventDetails = async function upsertEventDetails(
+async function upsertEventDetails(
   eventId,
   details,
 ) {
@@ -157,9 +157,9 @@ module.exports.upsertEventDetails = async function upsertEventDetails(
 
   if (error) throw error;
   return data;
-};
+}
 
-module.exports.getSignupCount = async function getSignupCount(eventId) {
+async function getSignupCount(eventId) {
   const { count, error } = await supabase
     .from("event_signup")
     .select("*", { count: "exact", head: true })
@@ -171,9 +171,9 @@ module.exports.getSignupCount = async function getSignupCount(eventId) {
   }
 
   return count || 0;
-};
+}
 
-module.exports.addSignup = async function addSignup(eventId, userId) {
+async function addSignup(eventId, userId) {
   const { error } = await supabase
     .from("event_signup")
     .insert([{ event_id: eventId, user_id: userId }]);
@@ -184,9 +184,9 @@ module.exports.addSignup = async function addSignup(eventId, userId) {
   }
 
   return true;
-};
+}
 
-module.exports.removeSignup = async function removeSignup(eventId, userId) {
+async function removeSignup(eventId, userId) {
   const { error } = await supabase
     .from("event_signup")
     .delete()
@@ -199,9 +199,9 @@ module.exports.removeSignup = async function removeSignup(eventId, userId) {
   }
 
   return true;
-};
+}
 
-module.exports.getFeedbackByEvent = async function getFeedbackByEvent(eventId) {
+async function getFeedbackByEvent(eventId) {
   const { data, error } = await supabase
     .from("event_feedback")
     .select(
@@ -215,9 +215,9 @@ module.exports.getFeedbackByEvent = async function getFeedbackByEvent(eventId) {
 
   if (error) throw error;
   return data;
-};
+}
 
-module.exports.getFeedbackStats = async function getFeedbackStats(eventId) {
+async function getFeedbackStats(eventId) {
   const { data, error } = await supabase
     .from("event_feedback")
     .select("rating")
@@ -243,4 +243,19 @@ module.exports.getFeedbackStats = async function getFeedbackStats(eventId) {
     totalResponses,
     distribution,
   };
+}
+
+export {
+  getAllEvents,
+  getUpcomingEvents,
+  getEventById,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+  upsertEventDetails,
+  getSignupCount,
+  addSignup,
+  removeSignup,
+  getFeedbackByEvent,
+  getFeedbackStats,
 };

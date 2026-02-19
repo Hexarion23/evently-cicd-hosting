@@ -1,7 +1,8 @@
-const proposalModel = require("../models/proposal.model");
-const { supabase } = require("../models/supabaseClient");
-const jwt = require("jsonwebtoken");
-const PDFDocument = require("pdfkit");
+import proposalModel from "../models/proposal.model.js";
+import { supabase } from "../models/supabaseClient.js";
+import jwt from "jsonwebtoken";
+import PDFDocument from "pdfkit";
+
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_change_me";
 
 // Helper: Get user from token
@@ -245,7 +246,7 @@ function drawContentSection(doc, title, content, startY) {
 // ==========================================
 // GET ALL USER PROPOSALS
 // ==========================================
-exports.getUserProposals = async (req, res) => {
+async function getUserProposals(req, res) {
   try {
     const user = getUser(req);
     if (!user) {
@@ -263,7 +264,7 @@ exports.getUserProposals = async (req, res) => {
 // ==========================================
 // GET SINGLE PROPOSAL
 // ==========================================
-exports.getProposal = async (req, res) => {
+async function getProposal(req, res) {
   try {
     const { id } = req.params;
     const user = getUser(req);
@@ -293,7 +294,7 @@ exports.getProposal = async (req, res) => {
 // ==========================================
 // CREATE NEW PROPOSAL
 // ==========================================
-exports.createProposal = async (req, res) => {
+async function createProposal(req, res) {
   try {
     const user = getUser(req);
     if (!user || user.role !== "exco") {
@@ -323,7 +324,7 @@ exports.createProposal = async (req, res) => {
 // ==========================================
 // UPDATE PROPOSAL
 // ==========================================
-exports.updateProposal = async (req, res) => {
+async function updateProposal(req, res) {
   try {
     const { id } = req.params;
     const user = getUser(req);
@@ -354,7 +355,7 @@ exports.updateProposal = async (req, res) => {
 // ==========================================
 // DELETE PROPOSAL
 // ==========================================
-exports.deleteProposal = async (req, res) => {
+async function deleteProposal(req, res) {
   try {
     const { id } = req.params;
     const user = getUser(req);
@@ -385,7 +386,7 @@ exports.deleteProposal = async (req, res) => {
 // ==========================================
 // SAVE PROPOSAL DRAFT
 // ==========================================
-exports.saveProposalDraft = async (req, res) => {
+async function saveProposalDraft(req, res) {
   try {
     const { id } = req.params;
     const user = getUser(req);
@@ -416,7 +417,7 @@ exports.saveProposalDraft = async (req, res) => {
 // ==========================================
 // DOWNLOAD PROPOSAL AS PDF (from saved proposal)
 // ==========================================
-exports.downloadProposal = async (req, res) => {
+async function downloadProposal(req, res) {
   try {
     const { id } = req.params;
     const user = getUser(req);
@@ -451,7 +452,7 @@ exports.downloadProposal = async (req, res) => {
 // ==========================================
 // GENERATE & DOWNLOAD PDF FROM FORM DATA
 // ==========================================
-exports.generatePDFFromFormData = async (req, res) => {
+async function generatePDFFromFormData(req, res) {
   try {
     const user = getUser(req);
     if (!user) return res.status(401).json({ error: "Unauthorized" });

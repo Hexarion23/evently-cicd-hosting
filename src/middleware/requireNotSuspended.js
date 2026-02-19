@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
-const createError = require("http-errors");
-const messengerModel = require("../models/messenger.model");
+import jwt from "jsonwebtoken";
+import createError from "http-errors";
+import * as messengerModel from "../models/messenger.model.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -14,7 +14,7 @@ function getAuth(req) {
   }
 }
 
-module.exports = async function requireNotSuspended(req, res, next) {
+export default async function requireNotSuspended(req, res, next) {
   try {
     const me = getAuth(req);
     const myId = Number(me.id);
@@ -28,4 +28,4 @@ module.exports = async function requireNotSuspended(req, res, next) {
   } catch (err) {
     next(err);
   }
-};
+}

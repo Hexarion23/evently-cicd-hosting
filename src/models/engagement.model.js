@@ -1,5 +1,5 @@
 // src/models/engagement.model.js
-const { supabase } = require("./supabaseClient");
+import { supabase } from "./supabaseClient.js";
 
 // Small helper for IN filters
 function inFilter(q, col, ids) {
@@ -156,7 +156,7 @@ async function getRecommendedEventsForUser(userId, limit = 5) {
   return filtered.slice(0, limit);
 }
 
-module.exports = {
+export {
   getUserEngagementStats,
   getRecommendedEventsForUser,
 };

@@ -1,6 +1,6 @@
 // src/controllers/analytics.controller.js
-const jwt = require('jsonwebtoken');
-const model = require('../models/analytics.model');
+import jwt from 'jsonwebtoken';
+import model from '../models/analytics.model.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_change_me';
 
@@ -109,7 +109,7 @@ async function getTopEventsBySignups(req, res) {
   }
 }
 
-module.exports = {
+export {
   getMyCca,
   getOverview,
   getSignupTrend,

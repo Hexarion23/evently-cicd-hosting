@@ -3,9 +3,9 @@
 // (Matches frontend event-details.js EXACTLY)
 // ============================================================
 
-const waitlistModel = require("../models/waitlist.model");
-const { supabase } = require("../models/supabaseClient");
-const jwt = require("jsonwebtoken");
+import * as waitlistModel from "../models/waitlist.model.js";
+import { supabase } from "../models/supabaseClient.js";
+import jwt from "jsonwebtoken";
 
 const PROMOTION_TIMEOUT_MS = 2 * 60 * 60 * 1000; // 2 hours
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -123,7 +123,7 @@ async function offerNextPromotion(eventId) {
 // ============================================================
 // JOIN WAITLIST or DIRECT SIGNUP (smart logic)
 // ============================================================
-exports.joinWaitlist = async (req, res) => {
+async function joinWaitlist(req, res) {
   try {
     const eventId = req.body.eventId || req.body.event_id;
     const userId = await getUserIdFromToken(req);
@@ -247,7 +247,7 @@ exports.joinWaitlist = async (req, res) => {
       error: "Internal server error",
     });
   }
-};
+}
 
 
     
@@ -259,7 +259,7 @@ exports.joinWaitlist = async (req, res) => {
 // - Student: removes self
 // - EXCO/Admin: can remove a specific user_id for an event
 // ============================================================
-exports.cancelWaitlist = async (req, res) => {
+async function cancelWaitlist(req, res) {
   try {
     const eventId = req.body.eventId || req.body.event_id;
     const requesterId = await getUserIdFromToken(req);
@@ -316,13 +316,13 @@ if (event?.cca_id) {
     console.error("cancelWaitlist error:", err);
     return res.status(500).json({ error: "Failed to cancel waitlist entry" });
   }
-};
+}
 
 
 // ============================================================
 // ACCEPT PROMOTION (user confirms spot)
 // ============================================================
-exports.acceptPromotion = async (req, res) => {
+async function acceptPromotion(req, res) {
   try {
     const eventId = req.body.eventId || req.body.event_id;
     const userId = await getUserIdFromToken(req);
@@ -357,12 +357,12 @@ exports.acceptPromotion = async (req, res) => {
     console.error("acceptPromotion error:", err);
     return res.status(500).json({ error: "Failed to accept promotion" });
   }
-};
+}
 
 // ============================================================
 // UNSIGN USER FROM EVENT → promote next candidate
 // ============================================================
-exports.handleUnsignEvent = async (req, res) => {
+async function handleUnsignEvent(req, res) {
   try {
     const eventId = req.body.eventId || req.body.event_id;
     const userId = await getUserIdFromToken(req);
@@ -387,12 +387,12 @@ exports.handleUnsignEvent = async (req, res) => {
     console.error("handleUnsignEvent error:", err);
     return res.status(500).json({ error: "Failed to unsign" });
   }
-};
+}
 
 // ============================================================
 // GET FULL WAITLIST FOR EVENT
 // ============================================================
-exports.getWaitlist = async (req, res) => {
+async function getWaitlist(req, res) {
   try {
     const eventId = req.params.eventId;
     const list = await waitlistModel.getWaitlistWithUserInfo(eventId);
@@ -402,12 +402,12 @@ exports.getWaitlist = async (req, res) => {
     console.error("getWaitlist error:", err);
     return res.status(500).json({ error: "Failed to load waitlist" });
   }
-};
+}
 
 // ============================================================
 // MANUAL PROMOTION (EXCO)
 // ============================================================
-exports.manualPromote = async (req, res) => {
+async function manualPromote(req, res) {
   try {
     const waitlistId = req.body.waitlistId;
     const entry = await waitlistModel.getWaitlistEntryById(waitlistId);
@@ -427,12 +427,12 @@ exports.manualPromote = async (req, res) => {
     console.error("manualPromote error:", err);
     return res.status(500).json({ error: "Failed manual promote" });
   }
-};
+}
 
 // ============================================================
 // REVOKE PROMOTION (EXCO)
 // ============================================================
-exports.revokePromotion = async (req, res) => {
+async function revokePromotion(req, res) {
   try {
     const waitlistId = req.body.waitlistId;
     const entry = await waitlistModel.getWaitlistEntryById(waitlistId);
@@ -448,12 +448,12 @@ exports.revokePromotion = async (req, res) => {
     console.error("revokePromotion error:", err);
     return res.status(500).json({ error: "Failed to revoke promotion" });
   }
-};
+}
 
 // ============================================================
 // CLEAR EXPIRED PROMOTION + promote next
 // ============================================================
-exports.clearExpiredPromotion = async (req, res) => {
+async function clearExpiredPromotion(req, res) {
   try {
     const waitlistId = req.body.waitlistId;
     const eventId = req.body.eventId;
@@ -470,11 +470,23 @@ exports.clearExpiredPromotion = async (req, res) => {
     console.error("clearExpiredPromotion error:", err);
     return res.status(500).json({ error: "Failed to clear expired promotion" });
   }
-};
+}
 
 // ============================================================
 // INTERNAL — USED BY CRON TO PROMOTE NEXT USER
 // ============================================================
-exports._cronAutoPromote = async (eventId) => {
+async function _cronAutoPromote(eventId) {
   await offerNextPromotion(eventId);
+}
+
+export {
+  joinWaitlist,
+  cancelWaitlist,
+  acceptPromotion,
+  handleUnsignEvent,
+  getWaitlist,
+  manualPromote,
+  revokePromotion,
+  clearExpiredPromotion,
+  _cronAutoPromote,
 };

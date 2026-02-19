@@ -1,14 +1,14 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-const {
+import {
   createUser,
   getUserByEmail,
   getUserByAdminNumber,
   getUserById,
-} = require("../models/Auth.model");
+} from "../models/Auth.model.js";
 
-const { supabase } = require("../models/supabaseClient");
+import { supabase } from "../models/supabaseClient.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -237,7 +237,7 @@ async function getUserProfile(req, res) {
   }
 }
 
-module.exports = {
+export {
   register,
   login,
   logout,

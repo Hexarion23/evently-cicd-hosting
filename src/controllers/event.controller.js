@@ -1,10 +1,11 @@
-const eventModel = require("../models/event.model");
-const notificationModel = require("../models/notification.model");
-const { supabase } = require("../models/supabaseClient");
-const { v4: uuidv4 } = require("uuid");
-const jwt = require("jsonwebtoken");
+import * as eventModel from "../models/event.model.js";
+import * as notificationModel from "../models/notification.model.js";
+import { supabase } from "../models/supabaseClient.js";
+import { v4 as uuidv4 } from "uuid";
+import jwt from "jsonwebtoken";
+import QRCode from "qrcode";
+
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_change_me";
-const QRCode = require("qrcode");
 
 // Helper: Get user from token
 function getUser(req) {
@@ -20,7 +21,7 @@ function getUser(req) {
 // ==========================================
 // 1. GET ALL EVENTS (Public - Approved Only)
 // ==========================================
-exports.getAllEvents = async (req, res) => {
+async function getAllEvents(req, res) {
   try {
     const {
       search = "",
@@ -83,13 +84,12 @@ exports.getAllEvents = async (req, res) => {
     console.error("getAllEvents error:", err);
     return res.status(500).json({ error: "Server error" });
   }
-};
-
+}
 
 // ==========================================
 // 2. GET EVENT BY ID
 // ==========================================
-exports.getEventById = async (req, res) => {
+async function getEventById(req, res) {
   const { id } = req.params;
   const { data, error } = await supabase
     .from("event")
@@ -99,12 +99,12 @@ exports.getEventById = async (req, res) => {
 
   if (error) return res.status(404).json({ error: "Event not found" });
   return res.json(data);
-};
+}
 
 // ==========================================
 // 3. CREATE EVENT (With Proposal & Image)
 // ==========================================
-exports.createEvent = async (req, res) => {
+async function createEvent(req, res) {
   try {
     const user = getUser(req);
     if (!user || user.role !== "exco") {
@@ -275,14 +275,14 @@ exports.createEvent = async (req, res) => {
     console.error("Create event error:", err);
     return res.status(500).json({ error: err.message });
   }
-};
+}
 
 // ==========================================
 // 4. TEACHER FEATURES (NEW)
 // ==========================================
 
 // Get events waiting for approval
-exports.getPendingEvents = async (req, res) => {
+async function getPendingEvents(req, res) {
   try {
     const user = getUser(req);
     // In a real app check: if (user.role !== 'teacher') ...
@@ -312,10 +312,10 @@ exports.getPendingEvents = async (req, res) => {
     console.error("Get pending error:", err);
     return res.status(500).json({ error: "Server error" });
   }
-};
+}
 
 // Approve or Reject event
-exports.reviewEvent = async (req, res) => {
+async function reviewEvent(req, res) {
   try {
     const user = getUser(req);
     if (!user) return res.status(403).json({ error: "Unauthorized" });
@@ -349,13 +349,13 @@ exports.reviewEvent = async (req, res) => {
     console.error("Review error:", err);
     return res.status(500).json({ error: err.message });
   }
-};
+}
 
 // ==========================================
 // 5. OTHER ORIGINAL METHODS (Kept as is)
 // ==========================================
 
-exports.uploadEventImage = async (req, res) => {
+async function uploadEventImage(req, res) {
   try {
     if (!req.file) return res.status(400).json({ error: "No file uploaded" });
     const file = req.file;
@@ -372,9 +372,9 @@ exports.uploadEventImage = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
-};
+}
 
-exports.signupEvent = async (req, res) => {
+async function signupEvent(req, res) {
   try {
     const { event_id, user_id } = req.body;
     if (!event_id || !user_id)
@@ -402,9 +402,9 @@ exports.signupEvent = async (req, res) => {
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
-};
+}
 
-exports.unsignEvent = async (req, res) => {
+async function unsignEvent(req, res) {
   try {
     const { event_id, user_id } = req.body;
     const { error } = await supabase
@@ -420,16 +420,16 @@ exports.unsignEvent = async (req, res) => {
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
-};
+}
 
-exports.deleteEvent = async (req, res) => {
+async function deleteEvent(req, res) {
   const { id } = req.params;
   const { error } = await supabase.from("event").delete().eq("event_id", id);
   if (error) return res.status(500).json({ error: error.message });
   return res.json({ message: "Deleted" });
-};
+}
 
-exports.updateEvent = async (req, res) => {
+async function updateEvent(req, res) {
   try {
     const { id } = req.params;
 
@@ -522,8 +522,7 @@ exports.updateEvent = async (req, res) => {
     console.error("updateEvent error:", e);
     return res.status(500).json({ error: e.message });
   }
-};
-
+}
 
 // --- Helper: Notify Teachers ---
 async function notifyTeachersOfSubmission(ccaId, eventTitle) {
@@ -544,7 +543,7 @@ async function notifyTeachersOfSubmission(ccaId, eventTitle) {
   }
 }
 
-exports.getEventFeedbackAnalysis = async (req, res) => {
+async function getEventFeedbackAnalysis(req, res) {
   const { eventId } = req.params;
 
   try {
@@ -576,9 +575,9 @@ exports.getEventFeedbackAnalysis = async (req, res) => {
     console.error("Error fetching feedback analysis:", error.message);
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
-};
+}
 
-exports.getEventHistory = async (req, res) => {
+async function getEventHistory(req, res) {
   try {
     const user = getUser(req);
     if (!user) return res.status(401).json({ error: "Not authenticated" });
@@ -701,5 +700,20 @@ exports.getEventHistory = async (req, res) => {
     console.error("getEventHistory error:", err);
     return res.status(500).json({ error: "Server error" });
   }
+}
+
+export {
+  getAllEvents,
+  getEventById,
+  createEvent,
+  getPendingEvents,
+  reviewEvent,
+  uploadEventImage,
+  signupEvent,
+  unsignEvent,
+  deleteEvent,
+  updateEvent,
+  getEventFeedbackAnalysis,
+  getEventHistory,
 };
 

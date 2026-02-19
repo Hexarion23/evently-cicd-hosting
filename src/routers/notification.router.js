@@ -1,6 +1,6 @@
-const express = require("express");
-const jwt = require("jsonwebtoken");
-const { supabase } = require("../models/supabaseClient");
+import express from "express";
+import jwt from "jsonwebtoken";
+import { supabase } from "../models/supabaseClient.js";
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_change_me";
@@ -207,4 +207,4 @@ router.put("/mark-all-read", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

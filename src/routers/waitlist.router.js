@@ -1,8 +1,9 @@
 // src/routers/waitlist.router.js
 
-const express = require("express");
+import express from 'express';
+import * as waitlistController from '../controllers/waitlist.controller.js';
+
 const router = express.Router();
-const waitlistController = require("../controllers/waitlist.controller");
 
 // ===============================
 // WAITLIST ROUTES
@@ -37,4 +38,4 @@ router.post("/revoke", waitlistController.revokePromotion);
 router.post("/clear-expired", waitlistController.clearExpiredPromotion);
 
 
-module.exports = router;
+export default router;

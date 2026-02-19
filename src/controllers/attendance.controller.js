@@ -1,8 +1,9 @@
-const { supabase } = require("../models/supabaseClient");
-const jwt = require("jsonwebtoken");
+import { supabase } from "../models/supabaseClient.js";
+import jwt from "jsonwebtoken";
+
 const { JWT_SECRET } = process.env;
 
-exports.scanAttendance = async (req, res) => {
+async function scanAttendance(req, res) {
   try {
     // If frontend sends user token, use it to identify user.
     // Accept either the scanner's cookie token OR include scanned_user_id in body.
@@ -130,4 +131,6 @@ exports.scanAttendance = async (req, res) => {
     console.error("scanAttendance error:", err);
     return res.status(500).json({ error: "Server error" });
   }
-};
+}
+
+export { scanAttendance };

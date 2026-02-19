@@ -1,12 +1,11 @@
 // src/routers/event-command.router.js
-const express = require("express");
-const router = express.Router();
-const PDFDocument = require("pdfkit");
-const { supabase } = require("../models/supabaseClient");
-const {
-  getEventFeedbackAnalysis,
-} = require("../controllers/event.controller.js");
-const nodemailer = require("nodemailer"); // <--- ADDED for RPA
+import express from "express";
+import PDFDocument from "pdfkit";
+import { supabase } from "../models/supabaseClient.js";
+import { getEventFeedbackAnalysis } from "../controllers/event.controller.js";
+import nodemailer from "nodemailer";
+
+const router = express.Router(); // <--- ADDED for RPA
 
 // ───────────────────────────────────────────────
 // RPA SETUP: Configure the Email Robot
@@ -421,4 +420,4 @@ router.post("/:event_id/send-email", async (req, res) => {
 
 router.get("/analysis/:eventId", getEventFeedbackAnalysis);
 
-module.exports = router;
+export default router;

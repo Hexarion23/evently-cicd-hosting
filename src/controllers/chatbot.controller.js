@@ -1,4 +1,4 @@
-const { generateGeminiResponse } = require('../models/chatbot.model');
+import { generateGeminiResponse } from '../models/chatbot.model.js';
 
 async function chatWithGemini(req, res) {
   try {
@@ -16,4 +16,4 @@ async function chatWithGemini(req, res) {
   }
 }
 
-module.exports = { chatWithGemini };
+export { chatWithGemini };

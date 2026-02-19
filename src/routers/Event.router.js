@@ -1,7 +1,8 @@
-const express = require("express");
+import express from "express";
+import * as eventController from "../controllers/event.controller.js";
+import multer from "multer";
+
 const router = express.Router();
-const eventController = require("../controllers/event.controller");
-const multer = require("multer");
 
 // Configure Multer for memory storage
 const upload = multer({
@@ -56,4 +57,4 @@ router.post("/:eventId/review", eventController.reviewEvent);
 router.post("/signup", eventController.signupEvent);
 router.post("/unsign", eventController.unsignEvent);
 
-module.exports = router;
+export default router;
