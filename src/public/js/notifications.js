@@ -3,13 +3,7 @@
 // ============================
 
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-export const supabase = createClient(
-  "https://fyfyvadrabgptmbiuvcl.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5Znl2YWRyYWJncHRtYml1dmNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyMDE5OTYsImV4cCI6MjA3ODc3Nzk5Nn0.kcqDjL3ZaZVOlVU7sDlcl6x5MxrWPlZ_681hzYbbSbQ"
-);
-
+import { supabase } from "./data.js";
 
 /**
  * Create a notification in the database
