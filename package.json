@@ -1,4 +1,7 @@
 {
+  "name": "evently",
+  "version": "1.0.0",
+  "type": "module",
   "dependencies": {
     "@google/genai": "^1.38.0",
     "@google/generative-ai": "^0.24.1",
